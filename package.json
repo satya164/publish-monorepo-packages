@@ -1,0 +1,136 @@
+{
+  "name": "publish-monorepo-packages",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Tool to make easier publish packages in monorepo to the registry",
+  "keywords": [],
+  "types": "types/index.d.ts",
+  "main": "lib/index.js",
+  "files": [
+    "src/",
+    "lib/",
+    "types/",
+    "!**/__tests__"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satya164/publish-monorepo-packages.git"
+  },
+  "author": "Satyajit Sahoo <satyajit.happy@gmail.com> (https://github.com/satya164/)",
+  "scripts": {
+    "lint": "eslint --ext .tsx,.ts,.js .",
+    "typescript": "tsc --noEmit",
+    "test": "jest",
+    "prebuild": "del lib/",
+    "babel": "babel src --out-dir lib --extensions '.tsx,.ts,.js' --ignore '**/__tests__/**' --source-maps --delete-dir-on-start",
+    "declarations": "tsc --declaration --emitDeclarationOnly --outDir lib",
+    "build": "yarn babel && yarn declarations",
+    "watch": "concurrently --kill-others 'yarn typescript --watch' 'yarn babel --watch'",
+    "prepare": "yarn build",
+    "release": "release-it"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "core-js": "^3.7.0",
+    "cross-spawn": "^7.0.3",
+    "decompress": "^4.2.1",
+    "decompress-targz": "^4.1.1",
+    "fs-extra": "^9.0.1",
+    "is-git-dirty": "^2.0.1",
+    "ora": "^5.1.0",
+    "pacote": "^11.1.13",
+    "tempy": "^1.0.0",
+    "yargs": "^16.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.1",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@release-it/conventional-changelog": "^2.0.0",
+    "@types/cross-spawn": "^6.0.2",
+    "@types/decompress": "^4.2.3",
+    "@types/fs-extra": "^9.0.4",
+    "@types/jest": "^26.0.15",
+    "codecov": "^3.8.1",
+    "commitlint": "^11.0.0",
+    "concurrently": "^5.3.0",
+    "del-cli": "^3.0.1",
+    "eslint": "^7.13.0",
+    "eslint-config-satya164": "^3.1.8",
+    "husky": "^4.3.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.0",
+    "release-it": "^14.2.1",
+    "typescript": "^4.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "yarn lint && yarn typescript && yarn test"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "chore: release ${version}",
+      "tagName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    },
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "angular"
+      }
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/types/",
+      "<rootDir>/lib/"
+    ],
+    "testRegex": "/__tests__/.*\\.(test|spec)\\.(js|tsx?)$"
+  },
+  "eslintConfig": {
+    "extends": "satya164",
+    "env": {
+      "node": true
+    }
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "coverage/",
+    "lib/"
+  ],
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "browserslist": [
+    ">1%",
+    "last 2 chrome versions",
+    "last 2 edge versions",
+    "last 2 firefox versions",
+    "last 2 safari versions",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all",
+    "not android <= 4.4",
+    "not samsung <= 4"
+  ]
+}

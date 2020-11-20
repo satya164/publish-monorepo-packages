@@ -1,0 +1,11 @@
+.DS_Store
+.cache
+.vscode
+
+/coverage/
+/lib/
+/dist/
+/node_modules/
+
+yarn-debug.log
+yarn-error.log
